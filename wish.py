@@ -3,12 +3,12 @@ import json
 import urllib3
 import random
 import locale
+import tokens
 locale.setlocale(locale.LC_ALL, '')
 
 http = urllib3.PoolManager()
 
-testBot = '1392096396:AAGwZfy5fk0bywDGNYtSolMDYV7MafAGJOY'
-covidBot = '1308060193:AAFkI1FAWd5k_Wf7Vk6sSzAgXVCdEg7lIeY'
+testBot, covidBot = tokens.tokens()
 
 
 def check_users(token):
