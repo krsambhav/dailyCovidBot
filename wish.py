@@ -11,24 +11,32 @@ import random
 
 #     response = requests.get(send_text)
 
-def check_users():
-    url = 'https://api.telegram.org/bot1308060193:AAFkI1FAWd5k_Wf7Vk6sSzAgXVCdEg7lIeY/getUpdates'
+# testBot = 1392096396:AAGwZfy5fk0bywDGNYtSolMDYV7MafAGJOY
+# covidBot = 1308060193:AAFkI1FAWd5k_Wf7Vk6sSzAgXVCdEg7lIeY
+
+def check_users(token):
+    url = f'https://api.telegram.org/bot{token}/getUpdates'
     response = requests.get(url)
     dec_resp = response.json()
     lenId = len(dec_resp['result'])
     userArr = []
+    nameArr = []
     for x in range(0,lenId):
         id = dec_resp['result'][x]['message']['chat']['id']
+        name = dec_resp['result'][x]['message']['chat']['first_name']
         userArr.append(id)
+        nameArr.append(name)
     userArr = list(dict.fromkeys(userArr))
-    return userArr
+    nameArr = list(dict.fromkeys(nameArr))
+    return userArr, nameArr
 
-def send_wish(msg, userList):
-    token = '1308060193:AAFkI1FAWd5k_Wf7Vk6sSzAgXVCdEg7lIeY'
+def send_wish(msg, userList, nameList, token):
     userList = userList
-    for user in userList:
+    nameList = nameList
+    listLen = len(userList)
+    for x in range(0, listLen):
         send_text = 'https://api.telegram.org/bot' + token + \
-        '/sendMessage?chat_id=' + str(user) + '&parse_mode=Markdown&text=' + msg
+        '/sendMessage?chat_id=' + str(userList[x]) + '&parse_mode=Markdown&text=Good Morning ' + str(nameList[x]) + '!' + msg
         response = requests.get(send_text)
 
 
@@ -47,7 +55,7 @@ def get_covid_data():
 
     msg = f"CoViD Updates:\n" \
           f"Yesterday Confirmed: {daily_confirmed}\nYesterday Deceased: {daily_deceased}\nYesterday Recovered: {daily_recovered}\n\n" \
-          f"Total Cofirmed: {total_confirmed}\nTotal Active: {total_active}\nTotal Recovered: {total_recovered}\nTotal Deaths: {total_deaths}" \
+          f"Total Confirmed: {total_confirmed}\nTotal Active: {total_active}\nTotal Recovered: {total_recovered}\nTotal Deaths: {total_deaths}" \
           f"\n\nStay Home, Stay Safe!"
     return msg
 
@@ -60,16 +68,17 @@ def get_quote():
     quote = dec_resp[rand]['text']
     author = dec_resp[rand]['author']
 
-    msg = f"Good Morning!\n\n{quote} ~ {author}\n\n"
+    msg = f"\n\n{quote} ~ {author}\n\n"
     return msg
 
 
 def create_wish():
+    token = '1308060193:AAFkI1FAWd5k_Wf7Vk6sSzAgXVCdEg7lIeY'
     quote = get_quote()
     covid = get_covid_data()
-    userList = check_users()
+    userList, nameList = check_users(token)
     msg = f'{quote}{covid}'
-    send_wish(msg, userList)
+    send_wish(msg, userList, nameList, token)
 
 
 create_wish()
