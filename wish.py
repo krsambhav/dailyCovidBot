@@ -57,7 +57,7 @@ def get_covid_data():
 
     delta_confirmed = daily_confirmed-daily_recovered
 
-    msg = f"CoViD Updates _{date}_:\n" \
+    msg = f"CoViD Updates |_{date}_|:\n" \
           f"Yesterday Confirmed: *{daily_confirmed:n}*\nYesterday Recovered: *{daily_recovered:n}*\nNet Added (C - R): *{delta_confirmed:n}*\nYesterday Deceased: *{daily_deceased:n}*\n-----------------------------------------\n" \
           f"Total Confirmed: *{total_confirmed:n}*\nTotal Active: *{total_active:n}*\nTotal Recovered: *{total_recovered:n}*\nTotal Deaths: *{total_deaths:n}*" \
           f"\n\n*Stay Home, Stay Safe* \U0001f49a"
