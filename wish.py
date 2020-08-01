@@ -7,8 +7,9 @@ locale.setlocale(locale.LC_ALL, '')
 
 http = urllib3.PoolManager()
 
-# testBot = 1392096396:AAGwZfy5fk0bywDGNYtSolMDYV7MafAGJOY
-# covidBot = 1308060193:AAFkI1FAWd5k_Wf7Vk6sSzAgXVCdEg7lIeY
+testBot = '1392096396:AAGwZfy5fk0bywDGNYtSolMDYV7MafAGJOY'
+covidBot = '1308060193:AAFkI1FAWd5k_Wf7Vk6sSzAgXVCdEg7lIeY'
+
 
 def check_users(token):
     url = f'https://api.telegram.org/bot{token}/getUpdates'
@@ -17,7 +18,7 @@ def check_users(token):
     lenId = len(dec_resp['result'])
     userArr = []
     nameArr = []
-    for x in range(0,lenId):
+    for x in range(0, lenId):
         id = dec_resp['result'][x]['message']['chat']['id']
         name = dec_resp['result'][x]['message']['chat']['first_name']
         userArr.append(id)
@@ -26,13 +27,16 @@ def check_users(token):
     nameArr = list(dict.fromkeys(nameArr))
     return userArr, nameArr
 
+
 def send_wish(msg, userList, nameList, token):
     userList = userList
     nameList = nameList
     listLen = len(userList)
     for x in range(0, listLen):
         send_text = 'https://api.telegram.org/bot' + token + \
-        '/sendMessage?chat_id=' + str(userList[x]) + '&parse_mode=markdown&text=*Good Morning ' + str(nameList[x]) + '!*' + msg
+            '/sendMessage?chat_id=' + \
+            str(userList[x]) + '&parse_mode=markdown&text=*Good Morning ' + \
+            str(nameList[x]) + '!*' + msg
         response = http.request('GET', send_text)
 
 
@@ -49,8 +53,10 @@ def get_covid_data():
     daily_deceased = int(dec_resp['cases_time_series'][-1]['dailydeceased'])
     daily_recovered = int(dec_resp['cases_time_series'][-1]['dailyrecovered'])
 
+    delta_confirmed = daily_confirmed-daily_recovered
+
     msg = f"CoViD Updates:\n" \
-          f"Yesterday Confirmed: *{daily_confirmed:n}*\nYesterday Recovered: *{daily_recovered:n}*\nYesterday Deceased: *{daily_deceased:n}*\n-----------------------------------------\n" \
+          f"Yesterday Confirmed: *{daily_confirmed:n}*\nYesterday Recovered: *{daily_recovered:n}*\nNet Added (C - R): *{delta_confirmed:n}*\nYesterday Deceased: *{daily_deceased:n}*\n-----------------------------------------\n" \
           f"Total Confirmed: *{total_confirmed:n}*\nTotal Active: *{total_active:n}*\nTotal Recovered: *{total_recovered:n}*\nTotal Deaths: *{total_deaths:n}*" \
           f"\n\n*Stay Home, Stay Safe* \U0001f9e1"
     return msg
@@ -69,7 +75,7 @@ def get_quote():
 
 
 def create_wish():
-    token = '1392096396:AAGwZfy5fk0bywDGNYtSolMDYV7MafAGJOY'
+    token = testBot
     quote = get_quote()
     covid = get_covid_data()
     userList, nameList = check_users(token)
@@ -78,5 +84,3 @@ def create_wish():
 
 
 create_wish()
-
-
