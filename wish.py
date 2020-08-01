@@ -12,7 +12,7 @@ import random
 #     response = requests.get(send_text)
 
 def check_users():
-    url = 'https://api.telegram.org/bot1392096396:AAGwZfy5fk0bywDGNYtSolMDYV7MafAGJOY/getUpdates'
+    url = 'https://api.telegram.org/bot1308060193:AAFkI1FAWd5k_Wf7Vk6sSzAgXVCdEg7lIeY/getUpdates'
     response = requests.get(url)
     dec_resp = response.json()
     lenId = len(dec_resp['result'])
@@ -24,13 +24,12 @@ def check_users():
     return userArr
 
 def send_wish(msg, userList):
-    token = '1392096396:AAGwZfy5fk0bywDGNYtSolMDYV7MafAGJOY'
+    token = '1308060193:AAFkI1FAWd5k_Wf7Vk6sSzAgXVCdEg7lIeY'
     userList = userList
     for user in userList:
         send_text = 'https://api.telegram.org/bot' + token + \
         '/sendMessage?chat_id=' + str(user) + '&parse_mode=Markdown&text=' + msg
-
-    response = requests.get(send_text)
+        response = requests.get(send_text)
 
 
 def get_covid_data():
