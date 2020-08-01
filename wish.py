@@ -3,12 +3,32 @@ import json
 import requests
 import random
 
+# def send_wish(msg):
+#     token = '1308060193:AAFkI1FAWd5k_Wf7Vk6sSzAgXVCdEg7lIeY'
+#     chat_id = '954226967'
 
-def send_wish(msg):
-    token = '1308060193:AAFkI1FAWd5k_Wf7Vk6sSzAgXVCdEg7lIeY'
-    chat_id = '954226967'
+#     send_text = 'https://api.telegram.org/bot' + token + '/sendMessage?chat_id=' + chat_id + '&parse_mode=Markdown&text=' + msg
 
-    send_text = 'https://api.telegram.org/bot' + token + '/sendMessage?chat_id=' + chat_id + '&parse_mode=Markdown&text=' + msg
+#     response = requests.get(send_text)
+
+def check_users():
+    url = 'https://api.telegram.org/bot1392096396:AAGwZfy5fk0bywDGNYtSolMDYV7MafAGJOY/getUpdates'
+    response = requests.get(url)
+    dec_resp = response.json()
+    lenId = len(dec_resp['result'])
+    userArr = []
+    for x in range(0,lenId):
+        id = dec_resp['result'][x]['message']['chat']['id']
+        userArr.append(id)
+    userArr = list(dict.fromkeys(userArr))
+    return userArr
+
+def send_wish(msg, userList):
+    token = '1392096396:AAGwZfy5fk0bywDGNYtSolMDYV7MafAGJOY'
+    userList = userList
+    for user in userList:
+        send_text = 'https://api.telegram.org/bot' + token + \
+        '/sendMessage?chat_id=' + str(user) + '&parse_mode=Markdown&text=' + msg
 
     response = requests.get(send_text)
 
@@ -48,8 +68,9 @@ def get_quote():
 def create_wish():
     quote = get_quote()
     covid = get_covid_data()
+    userList = check_users()
     msg = f'{quote}{covid}'
-    send_wish(msg)
+    send_wish(msg, userList)
 
 
 create_wish()
